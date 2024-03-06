@@ -7,5 +7,5 @@ An in depth explanation of the benchmarks and scores for these baselines can be 
 ## Installation
 
 ```bash
-pip install git+https://github.com/GT4SD/guacamol_baselines.git
+pip install git+https://github.com/PhillipDowney/guacamol_baselines.git
 ```

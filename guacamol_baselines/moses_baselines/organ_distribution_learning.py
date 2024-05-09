@@ -27,15 +27,16 @@ class OrganGenerator(DistributionMatchingGenerator):
     def __init__(self, config):
         # override device from all load points to current device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
+        device_map = "cuda:0" if torch.cuda.is_available() else torch.device("cpu")  # openad
         config.device = device  # openad
 
-        model_config = torch.load(config.config_load, map_location=device)
+        model_config = torch.load(config.config_load, map_location=device_map)
         model_config.device = device
 
-        model_vocab = torch.load(config.vocab_load, map_location=device)
+        model_vocab = torch.load(config.vocab_load, map_location=device_map)
         model_vocab.device = device
 
-        model_state = torch.load(config.model_load, map_location=device)
+        model_state = torch.load(config.model_load, map_location=device_map)
         model_state.device = device
 
         self.config = config
@@ -44,7 +45,6 @@ class OrganGenerator(DistributionMatchingGenerator):
         print("model_config\n", model_config)  # tracing
         print("model_vocab\n", model_vocab)  # tracing
         print("model_state\n", model_state)  # tracing
-        device = torch.device(config.device)
 
         self.model = ORGAN(model_vocab, model_config)
         self.model.load_state_dict(model_state)

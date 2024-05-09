@@ -30,6 +30,7 @@ class VaeGenerator(DistributionMatchingGenerator):
         map_location = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         model_state = torch.load(config.model_load, map_location=map_location)
         self.model_vocab = torch.load(config.vocab_load)
+        config.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
         self.config = config
 
         device = torch.device(config.device)

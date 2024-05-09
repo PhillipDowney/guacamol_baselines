@@ -19,6 +19,7 @@ class AaeGenerator(DistributionMatchingGenerator):
         model_config = torch.load(config.config_load)
         model_vocab = torch.load(config.vocab_load)
         model_state = torch.load(config.model_load)
+        config.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
         self.config = config
 
         device = torch.device(config.device)

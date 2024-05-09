@@ -26,15 +26,24 @@ def get_parser():
 
 class VaeGenerator(DistributionMatchingGenerator):
     def __init__(self, config):
+        # override device from all load points to current device
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
+        config.device = device  # openad
+
         model_config = torch.load(config.config_load)
-        map_location = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        model_state = torch.load(config.model_load, map_location=map_location)
-        self.model_vocab = torch.load(config.vocab_load)
-        config.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
+        model_config.device = device
+
+        model_vocab = torch.load(config.vocab_load)
+        model_vocab.device = device
+
+        model_state = torch.load(config.model_load)
+        model_state.device = device
+
         self.config = config
 
         device = torch.device(config.device)
 
+        # TODO: openad: set this in other distribution classes?
         # For CUDNN to work properly:
         if device.type.startswith('cuda'):
             torch.cuda.set_device(device.index or 0)

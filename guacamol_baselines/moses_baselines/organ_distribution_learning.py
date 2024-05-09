@@ -25,27 +25,31 @@ def get_parser():
 
 class OrganGenerator(DistributionMatchingGenerator):
     def __init__(self, config):
-        config.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad #tracing
+        # override device from all load points to current device
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
+        config.device = device  # openad
+
         model_config = torch.load(config.config_load)
+        model_config.device = device
+
         model_vocab = torch.load(config.vocab_load)
+        model_vocab.device = device
+
         model_state = torch.load(config.model_load)
-        config.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
+        model_state.device = device
+
         self.config = config
 
+        print("self.config\n", config)  # tracing
+        print("model_config\n", model_config)  # tracing
+        print("model_vocab\n", model_vocab)  # tracing
+        print("model_state\n", model_state)  # tracing
         device = torch.device(config.device)
-        print("model_config")
-        print(model_config)  # tracing
-        print("model_vocab")
-        print(model_vocab)  # tracing
+
         self.model = ORGAN(model_vocab, model_config)
-        print("model_state")
-        print(model_state)  # tracing
         self.model.load_state_dict(model_state)
 
-        print(device.type)  # tracing
-
-        print("self.model.device")
-        print(self.model.device)  # tracing
+        print("self.model.device\n", self.model.device)  # tracing
         self.model = self.model.to(device)
         self.model.eval()
 

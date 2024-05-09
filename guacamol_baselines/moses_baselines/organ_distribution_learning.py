@@ -29,13 +29,13 @@ class OrganGenerator(DistributionMatchingGenerator):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # openad
         config.device = device  # openad
 
-        model_config = torch.load(config.config_load)
+        model_config = torch.load(config.config_load, map_location=device)
         model_config.device = device
 
-        model_vocab = torch.load(config.vocab_load)
+        model_vocab = torch.load(config.vocab_load, map_location=device)
         model_vocab.device = device
 
-        model_state = torch.load(config.model_load)
+        model_state = torch.load(config.model_load, map_location=device)
         model_state.device = device
 
         self.config = config

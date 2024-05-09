@@ -40,8 +40,11 @@ class OrganGenerator(DistributionMatchingGenerator):
         self.model.load_state_dict(model_state)
         print(self.model.device)  # tracing
         # print(device.type)  # tracing
-
-        self.model = self.model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+        print("assigning device")
+        self.model.device = "cuda" if torch.cuda.is_available() else "cpu"
+        print("device assiged device")
+        print(self.model.device)  # tracing
+        # self.model = self.model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
         self.model.eval()
 
     def generate(self, number_samples: int) -> List[str]:

@@ -36,7 +36,7 @@ class OrganGenerator(DistributionMatchingGenerator):
         print(model_config)  # tracing
         print(model_vocab)  # tracing
         self.model = ORGAN(model_vocab, model_config)
-        print(model_state.device)  # tracing
+        print(model_state)  # tracing
         self.model.load_state_dict(model_state)
         print(self.model.device)  # tracing
         print(device.type)  # tracing
